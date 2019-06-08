@@ -17,9 +17,25 @@ export class AppComponent {
 
   vatCategories = VatCategory;
 
-  constructor(private invoiceCalculator: InvoiceCalculatorService) { }
+  constructor(private invoiceCalculator: InvoiceCalculatorService) {
+    this.invoice = this.invoiceCalculator.CalculateInvoice(this.invoiceLines);
+  }
 
   addInvoice() {
-    // ADD necessary code here
+    let category;
+    if (this.vatCategoryString == "Drinks") {
+      category = this.vatCategories.Drinks;
+    } else {
+      category = this.vatCategories.Food;
+    }
+
+    const invoiceLine: InvoiceLine = {
+      priceInclusiveVat: this.priceInclusiveVat,
+      product: this.product,
+      vatCategory: this.vatCategories[this.vatCategoryString]
+    };
+
+    this.invoiceLines.push(invoiceLine);
+    this.invoice = this.invoiceCalculator.CalculateInvoice(this.invoiceLines);
   }
 }
